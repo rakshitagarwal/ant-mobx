@@ -10,14 +10,18 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   SettingOutlined,
+  ProductOutlined,
+  CustomerServiceOutlined
 } from "@ant-design/icons";
 import DataTable from "./DataTable";
 import DashboardTabs from "./DashboardTabs";
 import RowCards from "./MobxCard";
-import { CollapseStoreContext } from "../store";
+import { CollapseStoreContext } from "../store2";
 import { observer } from "mobx-react";
 import Home from "./Home";
 import Settings from "./Settings";
+import InputForm from "./InputForm";
+import VisibleCards from "./VisibleCards";
 
 const items = [
   { label: "Home", key: "/", icon: <HomeOutlined /> },
@@ -32,9 +36,9 @@ const items = [
     icon: <UnorderedListOutlined />,
   },
   { label: "Profile", key: "/profile", icon: <UserOutlined /> },
-  { label: "Settings", key: "/settings", icon: <UserOutlined /> },
-  {},
-  {},
+  { label: "Settings", key: "/settings", icon: <SettingOutlined /> },
+  { label: "Products", key: "/products", icon: <ProductOutlined /> },
+  { label: "Customers", key: "/customers", icon: <CustomerServiceOutlined /> },
   {},
   {},
   {},
@@ -109,6 +113,8 @@ function Content() {
         <Route path="/dashboard" element={<DashboardTabs />} />
         <Route path="/usersList" element={<DataTable />} />
         <Route path="/profile" element={<RowCards />} />
+        <Route path="/products" element={<InputForm />} />
+        <Route path="/customers" element={<VisibleCards />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </div>

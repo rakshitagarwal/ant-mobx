@@ -4,12 +4,12 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "mobx-react";
-import { CollapseStoreContext } from "./store";
+import { todoStore, CollapseStoreContext } from "./store2";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Provider collapseStoreContext={CollapseStoreContext}>
+    <Provider todoStore={todoStore} collapseStoreContext={CollapseStoreContext}>
       <BrowserRouter>
         <App />
       </BrowserRouter>

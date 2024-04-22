@@ -1,16 +1,21 @@
 import { useState, useContext } from "react";
-import { TodoStoreContext } from "./store";
+import { TodoStoreContext } from "./store2";
 import { observer } from "mobx-react";
 
 const CreateTodo = observer(() => {
-  const [title, setTitle] = useState("");
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [designation, setdesignation] = useState("");
+
   const store = useContext(TodoStoreContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title.trim()) {
-      store.addTodo(title.trim());
-      setTitle("");
+    if (firstName.trim() && lastName.trim() && designation.trim()) {
+      store.addTodo(firstName.trim(), lastName.trim(), designation.trim());
+      setfirstName("");
+      setlastName("");
+      setdesignation("");
     }
   };
 
@@ -18,11 +23,26 @@ const CreateTodo = observer(() => {
     <form onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Add todo"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        placeholder="First name"
+        value={firstName}
+        onChange={(e) => setfirstName(e.target.value)}
       />
-      <button type="submit">Add</button>
+      <br />
+      <input
+        type="text"
+        placeholder="last name"
+        value={lastName}
+        onChange={(e) => setlastName(e.target.value)}
+      />
+      <br />
+      <input
+        type="text"
+        placeholder="Designation"
+        value={designation}
+        onChange={(e) => setdesignation(e.target.value)}
+      />
+      <br />
+      <button type="submit">Submit</button>
     </form>
   );
 });
