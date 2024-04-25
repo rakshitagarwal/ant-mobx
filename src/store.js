@@ -1,18 +1,56 @@
-// import { makeAutoObservable } from "mobx";
-// import { createContext } from "react";
+// import { v4 as uuidv4 } from "uuid";
+import { makeAutoObservable } from "mobx";
+import { createContext } from "react";
 
-// class Collapse {
-//   open = true;
+class InputForm {
+  firstName = "";
+  lastName = "";
+  designation = "";
+  graduate = false;
+  gender = "";
+  workPlace = "";
 
-//   constructor(open) {
-//     makeAutoObservable(this);
-//     this.open = open;
-//   }
+  constructor(firstName, lastName, designation, graduate, gender, workPlace) {
+    makeAutoObservable(this);
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.designation = designation;
+    this.graduate = graduate;
+    this.gender = gender;
+    this.workPlace = workPlace;
+  }
+}
 
-//   toggleCollapse() {
-//     this.open = !this.open;
-//   }
-// }
+class InputStore {
+  todos = [];
 
-// export const collapseStore = new Collapse();
-// export const CollapseStoreContext = createContext(collapseStore);
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  addTodo(firstName, lastName, designation, graduate, gender, workPlace) {
+    this.todos.push(
+      new InputForm(firstName, lastName, designation, graduate, gender, workPlace)
+    );
+  }
+
+}
+
+export const inputStore = new InputStore();
+export const inputStoreContext = createContext(inputStore);
+
+class Collapse {
+  open = true;
+
+  constructor(open) {
+    makeAutoObservable(this);
+    this.open = open;
+  }
+
+  toggleCollapse() {
+    this.open = !this.open;
+  }
+}
+
+export const collapseStore = new Collapse();
+export const CollapseStoreContext = createContext(collapseStore);

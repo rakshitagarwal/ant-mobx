@@ -1,21 +1,36 @@
-import React, { useContext, useState } from "react";
-import { Button, Form, Input } from "antd";
-import { TodoStoreContext } from "../store2";
+import React, { useContext } from "react";
+import { Button, Checkbox, Form, Input, Radio, Select } from "antd";
+import { inputStoreContext } from "../store";
+const { Option } = Select;
 
 const InputForm = () => {
-  const [firstName, setfirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [designation, setdesignation] = useState("");
+  const store = useContext(inputStoreContext);
 
-  const store = useContext(TodoStoreContext);
+  const [form] = Form.useForm();
+
+  const onGenderChange = (value) => {
+    switch (value) {
+      case "male":
+        form.setFieldsValue({
+          note: "Hi, man!",
+        });
+        break;
+      case "female":
+        form.setFieldsValue({
+          note: "Hi, lady!",
+        });
+        break;
+      case "other":
+        form.setFieldsValue({
+          note: "Hi there!",
+        });
+        break;
+      default:
+    }
+  };
 
   const onFinish = (values) => {
-    console.log("Success:", values);
-      store.addTodo(values.firstName, values.lastName, values.designation);
-      setfirstName("");
-      setlastName("");
-      setdesignation("");
-    
+    store.addTodo(values.firstName, values.lastName, values.designation, values.graduate, values.gender, values.workPlace);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -77,6 +92,48 @@ const InputForm = () => {
         ]}
       >
         <Input />
+      </Form.Item>
+
+      <Form.Item
+        name="workPlace"
+        label="Work Place"
+        rules={[
+          {
+            required: true,
+            message: "Please select your work place!",
+          },
+        ]}
+      >
+        <Radio.Group>
+          <Radio value="office">In Office</Radio>
+          <Radio value="home">Work from home</Radio>
+        </Radio.Group>
+      </Form.Item>
+
+      <Form.Item
+        name="gender"
+        label="Gender"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Select placeholder="Your gender" onChange={onGenderChange} allowClear>
+          <Option value="male">male</Option>
+          <Option value="female">female</Option>
+          <Option value="other">other</Option>
+        </Select>
+      </Form.Item>
+      <Form.Item
+        name="graduate"
+        valuePropName="checked"
+        wrapperCol={{
+          offset: 8,
+          span: 16,
+        }}
+      >
+        <Checkbox>Graduate</Checkbox>
       </Form.Item>
 
       <Form.Item

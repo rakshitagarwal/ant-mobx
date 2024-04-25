@@ -11,50 +11,33 @@ import {
   MenuFoldOutlined,
   SettingOutlined,
   ProductOutlined,
-  CustomerServiceOutlined
+  CustomerServiceOutlined,
 } from "@ant-design/icons";
 import DataTable from "./DataTable";
 import DashboardTabs from "./DashboardTabs";
 import RowCards from "./MobxCard";
-import { CollapseStoreContext } from "../store2";
+import { CollapseStoreContext } from "../store";
 import { observer } from "mobx-react";
 import Home from "./Home";
 import Settings from "./Settings";
 import InputForm from "./InputForm";
 import VisibleCards from "./VisibleCards";
 
-const items = [
+const items1 = [
   { label: "Home", key: "/", icon: <HomeOutlined /> },
-  {
-    label: "Dashboard",
-    key: "/dashboard",
-    icon: <DashboardOutlined />,
-  },
-  {
-    label: "Users List",
-    key: "/usersList",
-    icon: <UnorderedListOutlined />,
-  },
+  { label: "Dashboard", key: "/dashboard", icon: <DashboardOutlined /> },
+  { label: "Users List", key: "/usersList", icon: <UnorderedListOutlined /> },
   { label: "Profile", key: "/profile", icon: <UserOutlined /> },
   { label: "Settings", key: "/settings", icon: <SettingOutlined /> },
   { label: "Products", key: "/products", icon: <ProductOutlined /> },
   { label: "Customers", key: "/customers", icon: <CustomerServiceOutlined /> },
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {
-    label: "Signout",
-    key: "signout",
-    icon: <PoweroffOutlined />,
-    danger: true,
-  },
 ];
 
-const MenuB = observer(() => {
+const items2 = [
+  { label: "Signout", key: "signout", icon: <PoweroffOutlined /> },
+];
+
+const MenuBar = observer(() => {
   const store = useContext(CollapseStoreContext);
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
@@ -96,7 +79,7 @@ const MenuB = observer(() => {
               navigate(key);
             }
           }}
-          items={items}
+          items={items1}
           inlineCollapsed={collapsed}
         ></Menu>
         <Content />
@@ -121,4 +104,4 @@ function Content() {
   );
 }
 
-export default MenuB;
+export default MenuBar;

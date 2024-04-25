@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Card } from "antd";
 
-import { CollapseStoreContext } from "../store2";
+import { CollapseStoreContext } from "../store";
 import { observer } from "mobx-react";
 
 const RowCards = observer(() => {
