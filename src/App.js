@@ -1,4 +1,4 @@
-import MenuB from "./components/MenuBar";
+import MenuBar from "./components/MenuBar";
 
-const App = () => <MenuB />;
+const App = () => <MenuBar />;
 export default App;

@@ -31,9 +31,6 @@ const items1 = [
   { label: "Settings", key: "/settings", icon: <SettingOutlined /> },
   { label: "Products", key: "/products", icon: <ProductOutlined /> },
   { label: "Customers", key: "/customers", icon: <CustomerServiceOutlined /> },
-];
-
-const items2 = [
   { label: "Signout", key: "signout", icon: <PoweroffOutlined /> },
 ];
 
