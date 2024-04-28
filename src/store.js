@@ -1,25 +1,5 @@
-// import { v4 as uuidv4 } from "uuid";
 import { makeAutoObservable } from "mobx";
 import { createContext } from "react";
-
-class InputForm {
-  firstName = "";
-  lastName = "";
-  designation = "";
-  graduate = false;
-  gender = "";
-  workPlace = "";
-
-  constructor(firstName, lastName, designation, graduate, gender, workPlace) {
-    makeAutoObservable(this);
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.designation = designation;
-    this.graduate = graduate;
-    this.gender = gender;
-    this.workPlace = workPlace;
-  }
-}
 
 class InputStore {
   todos = [];
@@ -29,15 +9,42 @@ class InputStore {
   }
 
   addTodo(firstName, lastName, designation, graduate, gender, workPlace) {
-    this.todos.push(
-      new InputForm(firstName, lastName, designation, graduate, gender, workPlace)
-    );
+    this.todos.push({
+      firstName,
+      lastName,
+      designation,
+      graduate,
+      gender,
+      workPlace,
+    });
   }
-
 }
 
 export const inputStore = new InputStore();
 export const inputStoreContext = createContext(inputStore);
+
+class Students {
+  students = [];
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  addStudent(student) {
+    this.students.push(student);
+  }
+  deleteStudent(id) {
+    this.students = this.students.filter((student) => student.id !== id);
+  }
+  editStudent(editingStudent) {
+    this.students = this.students.map((student) =>
+      student.id === editingStudent.id ? editingStudent : student
+    );
+  }
+}
+
+export const inputStudent = new Students();
+export const StudentsContext = createContext(inputStudent);
 
 class Collapse {
   open = true;
