@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { createContext } from "react";
+import tempStudents from "./initialDB";
 
 class InputStore {
   todos = [];
@@ -20,11 +21,8 @@ class InputStore {
   }
 }
 
-export const inputStore = new InputStore();
-export const inputStoreContext = createContext(inputStore);
-
 class Students {
-  students = [];
+  students = [...tempStudents];
 
   constructor() {
     makeAutoObservable(this);
@@ -43,9 +41,6 @@ class Students {
   }
 }
 
-export const inputStudent = new Students();
-export const StudentsContext = createContext(inputStudent);
-
 class Collapse {
   open = true;
 
@@ -61,3 +56,9 @@ class Collapse {
 
 export const collapseStore = new Collapse();
 export const CollapseStoreContext = createContext(collapseStore);
+
+export const inputStudent = new Students();
+export const StudentsContext = createContext(inputStudent);
+
+export const inputStore = new InputStore();
+export const inputStoreContext = createContext(inputStore);

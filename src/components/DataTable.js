@@ -93,9 +93,12 @@ const DataTable = observer(() => {
   };
 
   const handleSaveAddingStudent = () => {
-    const randomNumber = parseInt(Math.random() * 1000);
+    if (!addingStudent.name || !addingStudent.email || !addingStudent.address) {
+      alert("All fields are required.");
+      return;
+    }
     const newStudent = {
-      id: randomNumber,
+      id: toJS(store.students).length + 1,
       name: addingStudent.name,
       email: addingStudent.email,
       address: addingStudent.address,
@@ -110,7 +113,7 @@ const DataTable = observer(() => {
       <Table columns={columns} dataSource={toJS(store.students)}></Table>
       <Modal
         title="Add Student"
-        visible={isAdding}
+        open={isAdding}
         okText="Save"
         onCancel={resetAdding}
         onOk={handleSaveAddingStudent}
@@ -139,7 +142,7 @@ const DataTable = observer(() => {
       </Modal>
       <Modal
         title="Edit Student"
-        visible={isEditing}
+        open={isEditing}
         okText="Save"
         onCancel={resetEditing}
         onOk={() => {

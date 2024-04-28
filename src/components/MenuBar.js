@@ -15,7 +15,7 @@ import {
 } from "@ant-design/icons";
 import DataTable from "./DataTable";
 import DashboardTabs from "./DashboardTabs";
-import RowCards from "./MobxCard";
+import RowCards from "./OpenStatus";
 import { CollapseStoreContext } from "../store";
 import { observer } from "mobx-react";
 import Home from "./Home";
