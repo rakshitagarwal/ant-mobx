@@ -12,6 +12,7 @@ import {
   SettingOutlined,
   ProductOutlined,
   CustomerServiceOutlined,
+  WeiboCircleOutlined
 } from "@ant-design/icons";
 import DataTable from "./DataTable";
 import DashboardTabs from "./DashboardTabs";
@@ -22,6 +23,7 @@ import Home from "./Home";
 import Settings from "./Settings";
 import InputForm from "./InputForm";
 import VisibleCards from "./VisibleCards";
+import Step from "./Steps";
 
 const items1 = [
   { label: "Home", key: "/", icon: <HomeOutlined /> },
@@ -31,6 +33,7 @@ const items1 = [
   { label: "Settings", key: "/settings", icon: <SettingOutlined /> },
   { label: "Products", key: "/products", icon: <ProductOutlined /> },
   { label: "Customers", key: "/customers", icon: <CustomerServiceOutlined /> },
+  { label: "Analyticcs", key: "/analytics", icon: <WeiboCircleOutlined /> },
   { label: "Signout", key: "signout", icon: <PoweroffOutlined /> },
 ];
 
@@ -96,6 +99,7 @@ function Content() {
         <Route path="/products" element={<InputForm />} />
         <Route path="/customers" element={<VisibleCards />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/analytics" element={<Step />} />
       </Routes>
     </div>
   );
