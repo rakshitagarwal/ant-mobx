@@ -4,7 +4,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import {
   UserOutlined,
   HomeOutlined,
-  PoweroffOutlined,
   UnorderedListOutlined,
   DashboardOutlined,
   MenuUnfoldOutlined,
@@ -12,18 +11,20 @@ import {
   SettingOutlined,
   ProductOutlined,
   CustomerServiceOutlined,
-  WeiboCircleOutlined
+  WeiboCircleOutlined,
+  SearchOutlined
 } from "@ant-design/icons";
-import DataTable from "./DataTable";
-import DashboardTabs from "./DashboardTabs";
-import RowCards from "./OpenStatus";
+import DataTable from "./UsersList";
+import DashboardTabs from "./Dashboard";
+import RowCards from "./Profile";
 import { CollapseStoreContext } from "../store";
 import { observer } from "mobx-react";
 import Home from "./Home";
 import Settings from "./Settings";
-import InputForm from "./InputForm";
-import VisibleCards from "./VisibleCards";
-import Step from "./Steps";
+import InputForm from "./Products";
+import VisibleCards from "./Customers";
+import Step from "./Analytics";
+import Research from "./Research";
 
 const items1 = [
   { label: "Home", key: "/", icon: <HomeOutlined /> },
@@ -34,7 +35,7 @@ const items1 = [
   { label: "Products", key: "/products", icon: <ProductOutlined /> },
   { label: "Customers", key: "/customers", icon: <CustomerServiceOutlined /> },
   { label: "Analyticcs", key: "/analytics", icon: <WeiboCircleOutlined /> },
-  { label: "Signout", key: "signout", icon: <PoweroffOutlined /> },
+  { label: "Research", key: "/research", icon: <SearchOutlined /> },
 ];
 
 const MenuBar = observer(() => {
@@ -73,11 +74,7 @@ const MenuBar = observer(() => {
       >
         <Menu
           onClick={({ key }) => {
-            if (key === "signout") {
-              // some feature
-            } else {
               navigate(key);
-            }
           }}
           items={items1}
           inlineCollapsed={collapsed}
@@ -100,6 +97,7 @@ function Content() {
         <Route path="/customers" element={<VisibleCards />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/analytics" element={<Step />} />
+        <Route path="/research" element={<Research />} />
       </Routes>
     </div>
   );

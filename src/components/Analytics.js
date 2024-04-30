@@ -6,9 +6,9 @@ import {
 } from "@ant-design/icons";
 
 import React, { useState } from "react";
-import LoginForm from "./FirstStep";
-import ProfileForm from "./SecondStep";
-import Finish from "./ThirdStep";
+import LoginForm from "./steps/FirstStep";
+import ProfileForm from "./steps/SecondStep";
+import Finish from "./steps/ThirdStep";
 
 const Step = () => {
   const [current, setCurrent] = useState(0);
