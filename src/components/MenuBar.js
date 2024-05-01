@@ -25,6 +25,7 @@ import InputForm from "./Products";
 import VisibleCards from "./Customers";
 import Step from "./Analytics";
 import Research from "./Research";
+import MultiSelect from "./MultiSelect";
 
 const items1 = [
   { label: "Home", key: "/", icon: <HomeOutlined /> },
@@ -36,6 +37,7 @@ const items1 = [
   { label: "Customers", key: "/customers", icon: <CustomerServiceOutlined /> },
   { label: "Analyticcs", key: "/analytics", icon: <WeiboCircleOutlined /> },
   { label: "Research", key: "/research", icon: <SearchOutlined /> },
+  { label: "Multiple", key: "/multiple", icon: <DashboardOutlined /> },
 ];
 
 const MenuBar = observer(() => {
@@ -98,6 +100,7 @@ function Content() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/analytics" element={<Step />} />
         <Route path="/research" element={<Research />} />
+        <Route path="/multiple" element={<MultiSelect />} />
       </Routes>
     </div>
   );

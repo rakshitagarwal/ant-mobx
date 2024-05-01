@@ -80,8 +80,18 @@ const Research = () => {
   const showDrawer = () => {
     setOpen(true);
   };
-  const onClose = () => {
+  const onFinishClosed = () => {
     setOpen(false);
+  };
+  const onClose = () => {
+    Modal.confirm({
+      title: "Are you sure, you want to close add student record?",
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        setOpen(false);
+      },
+    });
   };
   const onAddFinish = (obj) => {
     const newStudent = {
@@ -91,11 +101,15 @@ const Research = () => {
       address: obj.address,
     };
     setDataSource((prev) => [...prev, newStudent]);
-  }
+  };
   return (
     <>
       <Space>
-        <Button type="primary" onClick={showDrawer}>
+        <Button
+          style={{ marginLeft: "40px", marginBottom: "20px" }}
+          type="primary"
+          onClick={showDrawer}
+        >
           Add a new Student
         </Button>
       </Space>
@@ -103,58 +117,59 @@ const Research = () => {
         title="Add a new Student"
         placement={"top"}
         width={500}
+        height={"100%"}
         onClose={onClose}
         open={open}
       >
-        <AddData onAddRow={onAddFinish} closeDrawer={onClose}/>
+        <AddData onAddRow={onAddFinish} closeDrawer={onFinishClosed} />
       </Drawer>
-      
+
       {/* code for table*/}
-      <div style={{marginLeft:"40px"}}>
-      <Table columns={columns} dataSource={dataSource}></Table>
-      <Modal
-        title="Edit Student"
-        open={isEditing}
-        okText="Save"
-        onCancel={resetEditing}
-        onOk={() => {
-          setDataSource((prev) =>
-            prev.map((student) =>
-              student.id === editingStudent.id ? editingStudent : student
-            )
-          );
-          resetEditing();
-        }}
-      >
-        <Input
-          value={editingStudent?.name}
-          onChange={(e) =>
-            setEditingStudent((prev) => ({
-              ...prev,
-              name: e.target.value,
-            }))
-          }
-        />
-        <Input
-          value={editingStudent?.email}
-          onChange={(e) =>
-            setEditingStudent((prev) => ({
-              ...prev,
-              email: e.target.value,
-            }))
-          }
-        />
-        <Input
-          value={editingStudent?.address}
-          onChange={(e) =>
-            setEditingStudent((prev) => ({
-              ...prev,
-              address: e.target.value,
-            }))
-          }
-        />
-      </Modal>
-    </div>
+      <div style={{ marginLeft: "40px" }}>
+        <Table columns={columns} dataSource={dataSource}></Table>
+        <Modal
+          title="Edit Student"
+          open={isEditing}
+          okText="Save"
+          onCancel={resetEditing}
+          onOk={() => {
+            setDataSource((prev) =>
+              prev.map((student) =>
+                student.id === editingStudent.id ? editingStudent : student
+              )
+            );
+            resetEditing();
+          }}
+        >
+          <Input
+            value={editingStudent?.name}
+            onChange={(e) =>
+              setEditingStudent((prev) => ({
+                ...prev,
+                name: e.target.value,
+              }))
+            }
+          />
+          <Input
+            value={editingStudent?.email}
+            onChange={(e) =>
+              setEditingStudent((prev) => ({
+                ...prev,
+                email: e.target.value,
+              }))
+            }
+          />
+          <Input
+            value={editingStudent?.address}
+            onChange={(e) =>
+              setEditingStudent((prev) => ({
+                ...prev,
+                address: e.target.value,
+              }))
+            }
+          />
+        </Modal>
+      </div>
     </>
   );
 };

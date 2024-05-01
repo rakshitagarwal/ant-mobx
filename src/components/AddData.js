@@ -7,10 +7,14 @@ import {
 
 import React, { useState } from "react";
 
-const AddData = ({ onAddRow , closeDrawer}) => {
+const AddData = ({ onAddRow, closeDrawer }) => {
   const [current, setCurrent] = useState(0);
   const [loginDetails, setLoginDetails] = useState(null);
   const [profileDetails, setProfileDetails] = useState(null);
+
+  const prevStep = () => {
+    setCurrent((current) => current - 1);
+  };
 
   const onFinishLoginForm = (values) => {
     setLoginDetails(values);
@@ -23,8 +27,8 @@ const AddData = ({ onAddRow , closeDrawer}) => {
 
   const onFinishForm = () => {
     onAddRow({ ...loginDetails, ...profileDetails });
-    closeDrawer();
     setCurrent(0);
+    closeDrawer();
   };
 
   const isStepDisabled = (stepNumber) => {
@@ -42,10 +46,11 @@ const AddData = ({ onAddRow , closeDrawer}) => {
   const forms = [
     <LoginForm onFinish={onFinishLoginForm} initialValues={loginDetails} />,
     <ProfileForm
+      onPrev={prevStep}
       onFinish={onFinishProfileForm}
       initialValues={profileDetails}
     />,
-    <Finish onAdd={onFinishForm} />,
+    <Finish onPrev={prevStep} onAdd={onFinishForm} />,
   ];
   return (
     <div>
@@ -101,7 +106,7 @@ const LoginForm = ({ onFinish, initialValues }) => {
   );
 };
 
-const ProfileForm = ({ onFinish, initialValues }) => {
+const ProfileForm = ({ onPrev, onFinish, initialValues }) => {
   return (
     <Form onFinish={onFinish} initialValues={initialValues}>
       <Form.Item
@@ -131,6 +136,9 @@ const ProfileForm = ({ onFinish, initialValues }) => {
       </Form.Item>
 
       <Form.Item>
+        <Button onClick={()=> onPrev()}>
+          Prev
+        </Button>&nbsp;&nbsp;
         <Button type="primary" htmlType="submit">
           Next
         </Button>
@@ -139,13 +147,16 @@ const ProfileForm = ({ onFinish, initialValues }) => {
   );
 };
 
-const Finish = ({ onAdd }) => {
+const Finish = ({ onPrev, onAdd }) => {
   const finish = () => {
     onAdd();
   };
   return (
     <>
       <h1>You are all set</h1>
+      <Button onClick={()=> onPrev()}>
+          Prev
+        </Button>&nbsp;&nbsp;
       <Button type="primary" onClick={finish}>
         Add Student
       </Button>
