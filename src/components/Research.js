@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Drawer, Modal, Space, Table } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import tempStudents from "../initialDB";
 import DataDrawer from "./DataDrawer";
+import { StudentsContext } from "../store";
+import { toJS } from "mobx";
+import { observer } from "mobx-react";
 
-const Research = () => {
+const Research = observer( () => {
+  const store = useContext(StudentsContext);
+
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [dataSource, setDataSource] = useState(tempStudents);
   const [loginDetails, setLoginDetails] = useState({ email: '', expertise: []});
   const [profileDetails, setProfileDetails] = useState({ name: '', address: ''});
   const [editingStudent, setEditingStudent] = useState({ ...loginDetails, ...profileDetails, id: 0});
@@ -61,24 +64,16 @@ const Research = () => {
     },
   ];
 
+  // delete student
   const onDeleteStudent = (record) => {
     Modal.confirm({
       title: "Are you sure, you want to delete this student record?",
       okText: "Yes",
       okType: "danger",
       onOk: () => {
-        setDataSource((prev) => {
-          return prev.filter((student) => student.id !== record.id);
-        });
+        store.deleteStudent(record.id);
       },
     });
-  };
-
-  const onEditStudent = (record) => {
-    setIsEditing(true);
-    setLoginDetails({ email: record.email, expertise: record.expertise});
-    setProfileDetails({ name: record.name, address: record.address});
-    setEditingStudent({ ...record });
   };
 
   const showDrawer = () => {
@@ -88,6 +83,19 @@ const Research = () => {
     setOpen(false);
   };
 
+  // object values to be added
+  const onAddFinish = (obj) => {
+    const newStudent = {
+      id: obj.id,
+      name: obj.name,
+      email: obj.email,
+      address: obj.address,
+      expertise: [...obj.expertise],
+    };
+    store.addStudent(newStudent);
+  };
+
+  // close drawer of add
   const onCloseAdd = () => {
     Modal.confirm({
       title: "Are you sure, you want to close add student record?",
@@ -101,6 +109,7 @@ const Research = () => {
     });
   };
 
+  // close drawer of edit
   const onCloseEdit = () => {
     Modal.confirm({
       title: "Are you sure, you want to close edit student record?",
@@ -115,25 +124,23 @@ const Research = () => {
     });
   };
 
-  const onAddFinish = (obj) => {
-    const newStudent = {
-      id: obj.id,
-      name: obj.name,
-      email: obj.email,
-      address: obj.address,
-      expertise: [...obj.expertise],
-    };
-    setDataSource((prev) => [...prev, newStudent]);
+  // edit with initial values
+  const onEditStudent = (record) => {
+    setIsEditing(true);
+    setLoginDetails({ email: record.email, expertise: record.expertise});
+    setProfileDetails({ name: record.name, address: record.address});
+    setEditingStudent({ ...record });
   };
 
+  // edit with updated values
   const onEditFinish = (editingStudent) => {
-    setDataSource((prev) =>
-      prev.map((student) =>
-        student.id === editingStudent.id ? editingStudent : student
-      )
-    );
+    store.editStudent(editingStudent);
+    setLoginDetails({ email: '', expertise: []});
+    setProfileDetails({ name: '', address: ''});
+    setEditingStudent({ email: '', expertise: [], name: '', address: '', id: 0});
     setIsEditing(false);
   };
+  
   return (
     <>
       <Space>
@@ -155,7 +162,7 @@ const Research = () => {
         open={open}
       >
         <DataDrawer
-          studentId={dataSource.length + 1}
+          studentId={toJS(store.students).length + 1}
           loginDetails={loginDetails}
           profileDetails={profileDetails}
           setLoginDetails={setLoginDetails}
@@ -187,10 +194,10 @@ const Research = () => {
       )}
 
       <div style={{ marginLeft: "40px" }}>
-        <Table columns={columns} dataSource={dataSource}></Table>
+        <Table columns={columns} dataSource={toJS(store.students)}></Table>
       </div>
     </>
   );
-};
+});
 
 export default Research;
