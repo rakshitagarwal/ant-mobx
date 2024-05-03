@@ -1,16 +1,21 @@
-import { Button, Form, Input, Steps } from "antd";
+import React, { useState } from "react";
+import { Button, Form, Input, Steps, Select, Space } from "antd";
 import {
   LoginOutlined,
   ProfileOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
 
-import React, { useState } from "react";
-
-const AddData = ({ onAddRow, closeDrawer }) => {
+const DataDrawer = ({
+  studentId,
+  loginDetails,
+  profileDetails,
+  setLoginDetails,
+  setProfileDetails,
+  onRowModify,
+  closeDrawer,
+}) => {
   const [current, setCurrent] = useState(0);
-  const [loginDetails, setLoginDetails] = useState(null);
-  const [profileDetails, setProfileDetails] = useState(null);
 
   const prevStep = () => {
     setCurrent((current) => current - 1);
@@ -26,9 +31,11 @@ const AddData = ({ onAddRow, closeDrawer }) => {
   };
 
   const onFinishForm = () => {
-    onAddRow({ ...loginDetails, ...profileDetails });
+    onRowModify({ ...loginDetails, ...profileDetails, id: studentId });
     setCurrent(0);
     closeDrawer();
+    setLoginDetails(null);
+    setProfileDetails(null);
   };
 
   const isStepDisabled = (stepNumber) => {
@@ -81,11 +88,32 @@ const AddData = ({ onAddRow, closeDrawer }) => {
 };
 
 const LoginForm = ({ onFinish, initialValues }) => {
+  const [multipleSelected, setMultipleSelected] = useState(
+    initialValues ? [...initialValues.expertise] : []
+  );
+
+  const onFormSubmit = (values) => {
+    values.expertise = multipleSelected;
+    onFinish({ ...values });
+  };
+
+  const handleChange = (values) => {
+    setMultipleSelected([...values]);
+  };
+
+  const options = [
+    { label: "frontend", value: "frontend " },
+    { label: "backend", value: "backend " },
+    { label: "fullstack", value: "fullstack " },
+    { label: "database", value: "database " },
+  ];
+
   return (
-    <Form onFinish={onFinish} initialValues={initialValues}>
+    <Form onFinish={onFormSubmit} initialValues={initialValues}>
       <Form.Item
         label="email"
-        name={"email"}
+        name="email"
+        initialValue={""}
         rules={[
           {
             required: true,
@@ -97,12 +125,36 @@ const LoginForm = ({ onFinish, initialValues }) => {
         <Input />
       </Form.Item>
 
+      <Form.Item label="Skills" name="expertise">
+        <MultiSelect
+          initialValues={initialValues ? initialValues.expertise : []}
+          options={options}
+          handleSubmit={handleChange}
+        />
+      </Form.Item>
+
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Next
         </Button>
       </Form.Item>
     </Form>
+  );
+};
+
+const MultiSelect = ({ options, handleSubmit, initialValues }) => {
+  return (
+    <Space style={{ width: "100%" }} direction="vertical">
+      <Select
+        mode="multiple"
+        allowClear
+        defaultValue={initialValues}
+        style={{ width: "20rem" }}
+        placeholder="Please select"
+        onChange={handleSubmit}
+        options={options}
+      />
+    </Space>
   );
 };
 
@@ -128,7 +180,7 @@ const ProfileForm = ({ onPrev, onFinish, initialValues }) => {
         rules={[
           {
             required: true,
-            message: "Please enter your last name",
+            message: "Please enter your address",
           },
         ]}
       >
@@ -136,9 +188,7 @@ const ProfileForm = ({ onPrev, onFinish, initialValues }) => {
       </Form.Item>
 
       <Form.Item>
-        <Button onClick={()=> onPrev()}>
-          Prev
-        </Button>&nbsp;&nbsp;
+        <Button onClick={() => onPrev()}>Prev</Button>&nbsp;&nbsp;
         <Button type="primary" htmlType="submit">
           Next
         </Button>
@@ -154,14 +204,12 @@ const Finish = ({ onPrev, onAdd }) => {
   return (
     <>
       <h1>You are all set</h1>
-      <Button onClick={()=> onPrev()}>
-          Prev
-        </Button>&nbsp;&nbsp;
+      <Button onClick={() => onPrev()}>Prev</Button>&nbsp;&nbsp;
       <Button type="primary" onClick={finish}>
-        Add Student
+        Submit
       </Button>
     </>
   );
 };
 
-export default AddData;
+export default DataDrawer;

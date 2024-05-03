@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Button, Drawer, Input, Modal, Space, Table } from "antd";
-import AddData from "./AddData";
+import { Button, Drawer, Modal, Space, Table } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import tempStudents from "../initialDB";
+import DataDrawer from "./DataDrawer";
 
 const Research = () => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editingStudent, setEditingStudent] = useState(null);
   const [dataSource, setDataSource] = useState(tempStudents);
+  const [loginDetails, setLoginDetails] = useState({ email: '', expertise: []});
+  const [profileDetails, setProfileDetails] = useState({ name: '', address: ''});
+  const [editingStudent, setEditingStudent] = useState({ ...loginDetails, ...profileDetails, id: 0});
 
   const columns = [
     {
@@ -33,6 +35,11 @@ const Research = () => {
     },
     {
       key: "5",
+      title: "Skills",
+      dataIndex: "expertise",
+    },
+    {
+      key: "6",
       title: "Actions",
       render: (record) => {
         return (
@@ -69,12 +76,9 @@ const Research = () => {
 
   const onEditStudent = (record) => {
     setIsEditing(true);
+    setLoginDetails({ email: record.email, expertise: record.expertise});
+    setProfileDetails({ name: record.name, address: record.address});
     setEditingStudent({ ...record });
-  };
-
-  const resetEditing = () => {
-    setIsEditing(false);
-    setEditingStudent(null);
   };
 
   const showDrawer = () => {
@@ -83,24 +87,52 @@ const Research = () => {
   const onFinishClosed = () => {
     setOpen(false);
   };
-  const onClose = () => {
+
+  const onCloseAdd = () => {
     Modal.confirm({
       title: "Are you sure, you want to close add student record?",
       okText: "Yes",
       okType: "danger",
       onOk: () => {
         setOpen(false);
+        setLoginDetails({ email: '', expertise: []});
+        setProfileDetails({ name: '', address: ''});
       },
     });
   };
+
+  const onCloseEdit = () => {
+    Modal.confirm({
+      title: "Are you sure, you want to close edit student record?",
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        setIsEditing(false);
+        setLoginDetails({ email: '', expertise: []});
+        setProfileDetails({ name: '', address: ''});
+        setEditingStudent({ email: '', expertise: [], name: '', address: '', id: 0});
+      },
+    });
+  };
+
   const onAddFinish = (obj) => {
     const newStudent = {
-      id: dataSource.length + 1,
+      id: obj.id,
       name: obj.name,
       email: obj.email,
       address: obj.address,
+      expertise: [...obj.expertise],
     };
     setDataSource((prev) => [...prev, newStudent]);
+  };
+
+  const onEditFinish = (editingStudent) => {
+    setDataSource((prev) =>
+      prev.map((student) =>
+        student.id === editingStudent.id ? editingStudent : student
+      )
+    );
+    setIsEditing(false);
   };
   return (
     <>
@@ -118,57 +150,44 @@ const Research = () => {
         placement={"top"}
         width={500}
         height={"100%"}
-        onClose={onClose}
+        onClose={onCloseAdd}
+        destroyOnClose={true}
         open={open}
       >
-        <AddData onAddRow={onAddFinish} closeDrawer={onFinishClosed} />
+        <DataDrawer
+          studentId={dataSource.length + 1}
+          loginDetails={loginDetails}
+          profileDetails={profileDetails}
+          setLoginDetails={setLoginDetails}
+          setProfileDetails={setProfileDetails}
+          onRowModify={onAddFinish}
+          closeDrawer={onFinishClosed}
+        />
       </Drawer>
 
-      {/* code for table*/}
+      {isEditing && (
+        <Drawer
+          title="Edit Student"
+          placement={"top"}
+          width={500}
+          height={"100%"}
+          onClose={onCloseEdit}
+          open={isEditing}
+        >
+          <DataDrawer
+            studentId={editingStudent.id}
+            loginDetails={loginDetails}
+            profileDetails={profileDetails}
+            setLoginDetails={setLoginDetails}
+            setProfileDetails={setProfileDetails}
+            onRowModify={onEditFinish}
+            closeDrawer={onFinishClosed}
+          />
+        </Drawer>
+      )}
+
       <div style={{ marginLeft: "40px" }}>
         <Table columns={columns} dataSource={dataSource}></Table>
-        <Modal
-          title="Edit Student"
-          open={isEditing}
-          okText="Save"
-          onCancel={resetEditing}
-          onOk={() => {
-            setDataSource((prev) =>
-              prev.map((student) =>
-                student.id === editingStudent.id ? editingStudent : student
-              )
-            );
-            resetEditing();
-          }}
-        >
-          <Input
-            value={editingStudent?.name}
-            onChange={(e) =>
-              setEditingStudent((prev) => ({
-                ...prev,
-                name: e.target.value,
-              }))
-            }
-          />
-          <Input
-            value={editingStudent?.email}
-            onChange={(e) =>
-              setEditingStudent((prev) => ({
-                ...prev,
-                email: e.target.value,
-              }))
-            }
-          />
-          <Input
-            value={editingStudent?.address}
-            onChange={(e) =>
-              setEditingStudent((prev) => ({
-                ...prev,
-                address: e.target.value,
-              }))
-            }
-          />
-        </Modal>
       </div>
     </>
   );

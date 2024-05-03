@@ -16,7 +16,7 @@ const MultiSelect = () => (
       mode="multiple"
       allowClear
       style={{
-        width: '100%',
+        width: '20rem',
       }}
       placeholder="Please select"
       defaultValue={['a10', 'c12']}
