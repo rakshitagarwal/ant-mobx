@@ -109,36 +109,42 @@ const LoginForm = ({ onFinish, initialValues }) => {
   ];
 
   return (
-    <Form onFinish={onFormSubmit} initialValues={initialValues}>
-      <Form.Item
-        label="email"
-        name="email"
-        initialValue={""}
-        rules={[
-          {
-            required: true,
-            type: "email",
-            message: "Please enter a valid email address",
-          },
-        ]}
+    <div style={{ width: "40rem", marginLeft: "25rem" }}>
+      <Form
+        layout={"vertical"}
+        onFinish={onFormSubmit}
+        initialValues={initialValues}
       >
-        <Input />
-      </Form.Item>
+        <Form.Item
+          label="email"
+          name="email"
+          initialValue={""}
+          rules={[
+            {
+              required: true,
+              type: "email",
+              message: "Please enter a valid email address",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item label="Skills" name="expertise">
-        <MultiSelect
-          initialValues={initialValues ? initialValues.expertise : []}
-          options={options}
-          handleSubmit={handleChange}
-        />
-      </Form.Item>
+        <Form.Item label="Skills" name="expertise">
+          <MultiSelect
+            initialValues={initialValues ? initialValues.expertise : []}
+            options={options}
+            handleSubmit={handleChange}
+          />
+        </Form.Item>
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Next
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Next
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 
@@ -149,7 +155,6 @@ const MultiSelect = ({ options, handleSubmit, initialValues }) => {
         mode="multiple"
         allowClear
         defaultValue={initialValues}
-        style={{ width: "20rem" }}
         placeholder="Please select"
         onChange={handleSubmit}
         options={options}
@@ -160,40 +165,46 @@ const MultiSelect = ({ options, handleSubmit, initialValues }) => {
 
 const ProfileForm = ({ onPrev, onFinish, initialValues }) => {
   return (
-    <Form onFinish={onFinish} initialValues={initialValues}>
-      <Form.Item
-        label="Name"
-        name="name"
-        rules={[
-          {
-            required: true,
-            message: "Please enter your first name",
-          },
-        ]}
+    <div style={{ width: "40rem", marginLeft: "25rem" }}>
+      <Form
+        layout={"vertical"}
+        onFinish={onFinish}
+        initialValues={initialValues}
       >
-        <Input />
-      </Form.Item>
+        <Form.Item
+          label="Name"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "Please enter your first name",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        label="Address"
-        name="address"
-        rules={[
-          {
-            required: true,
-            message: "Please enter your address",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+        <Form.Item
+          label="Address"
+          name="address"
+          rules={[
+            {
+              required: true,
+              message: "Please enter your address",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item>
-        <Button onClick={() => onPrev()}>Prev</Button>&nbsp;&nbsp;
-        <Button type="primary" htmlType="submit">
-          Next
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item>
+          <Button onClick={() => onPrev()}>Prev</Button>&nbsp;&nbsp;
+          <Button type="primary" htmlType="submit">
+            Next
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 
@@ -202,13 +213,13 @@ const Finish = ({ onPrev, onAdd }) => {
     onAdd();
   };
   return (
-    <>
+    <div style={{ width: "40rem", marginLeft: "25rem" }}>
       <h1>You are all set</h1>
       <Button onClick={() => onPrev()}>Prev</Button>&nbsp;&nbsp;
       <Button type="primary" onClick={finish}>
         Submit
       </Button>
-    </>
+    </div>
   );
 };
 
