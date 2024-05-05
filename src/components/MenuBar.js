@@ -87,7 +87,10 @@ const MenuBar = observer(() => {
 
 function Content() {
   return (
-    <div>
+    <div style={{
+      width: "100%",
+      height: "100%",
+    }}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<DashboardTabs />} />

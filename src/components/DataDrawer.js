@@ -14,6 +14,7 @@ const DataDrawer = ({
   setProfileDetails,
   onRowModify,
   closeDrawer,
+  mode,
 }) => {
   const [current, setCurrent] = useState(0);
 
@@ -57,7 +58,7 @@ const DataDrawer = ({
       onFinish={onFinishProfileForm}
       initialValues={profileDetails}
     />,
-    <Finish onPrev={prevStep} onAdd={onFinishForm} />,
+    <Finish onPrev={prevStep} onAdd={onFinishForm} mode={mode} />,
   ];
   return (
     <div>
@@ -155,7 +156,6 @@ const MultiSelect = ({ options, handleSubmit, initialValues }) => {
         mode="multiple"
         allowClear
         defaultValue={initialValues}
-        placeholder="Please select"
         onChange={handleSubmit}
         options={options}
       />
@@ -177,7 +177,7 @@ const ProfileForm = ({ onPrev, onFinish, initialValues }) => {
           rules={[
             {
               required: true,
-              message: "Please enter your first name",
+              message: "Please enter your name",
             },
           ]}
         >
@@ -208,7 +208,7 @@ const ProfileForm = ({ onPrev, onFinish, initialValues }) => {
   );
 };
 
-const Finish = ({ onPrev, onAdd }) => {
+const Finish = ({ onPrev, onAdd, mode }) => {
   const finish = () => {
     onAdd();
   };
@@ -217,7 +217,7 @@ const Finish = ({ onPrev, onAdd }) => {
       <h1>You are all set</h1>
       <Button onClick={() => onPrev()}>Prev</Button>&nbsp;&nbsp;
       <Button type="primary" onClick={finish}>
-        Submit
+        {mode ? "Edit Student" : "Add Student"}
       </Button>
     </div>
   );

@@ -6,14 +6,14 @@ import { StudentsContext } from "../store";
 import { toJS } from "mobx";
 import { observer } from "mobx-react";
 
-const Research = observer( () => {
+const Research = observer(() => {
   const store = useContext(StudentsContext);
 
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [loginDetails, setLoginDetails] = useState({ email: '', expertise: []});
-  const [profileDetails, setProfileDetails] = useState({ name: '', address: ''});
-  const [editingStudent, setEditingStudent] = useState({ ...loginDetails, ...profileDetails, id: 0});
+  const [loginDetails, setLoginDetails] = useState({ email: "", expertise: [] });
+  const [profileDetails, setProfileDetails] = useState({ name: "", address: ""});
+  const [editingStudent, setEditingStudent] = useState({ ...loginDetails, ...profileDetails, id: 0 });
 
   const columns = [
     {
@@ -49,7 +49,7 @@ const Research = observer( () => {
           <>
             <EditOutlined
               onClick={() => {
-                onEditStudent(record);
+                editDrawer(record);
               }}
             />
             <DeleteOutlined
@@ -76,11 +76,23 @@ const Research = observer( () => {
     });
   };
 
-  const showDrawer = () => {
+  const addDrawer = () => {
     setOpen(true);
   };
   const onFinishClosed = () => {
     setOpen(false);
+  };
+
+  const resetStudent = () => {
+    setLoginDetails({ email: "", expertise: [] });
+    setProfileDetails({ name: "", address: "" });
+    setEditingStudent({
+      email: "",
+      expertise: [],
+      name: "",
+      address: "",
+      id: 0,
+    });
   };
 
   // object values to be added
@@ -103,8 +115,7 @@ const Research = observer( () => {
       okType: "danger",
       onOk: () => {
         setOpen(false);
-        setLoginDetails({ email: '', expertise: []});
-        setProfileDetails({ name: '', address: ''});
+        resetStudent();
       },
     });
   };
@@ -117,81 +128,57 @@ const Research = observer( () => {
       okType: "danger",
       onOk: () => {
         setIsEditing(false);
-        setLoginDetails({ email: '', expertise: []});
-        setProfileDetails({ name: '', address: ''});
-        setEditingStudent({ email: '', expertise: [], name: '', address: '', id: 0});
+        resetStudent();
       },
     });
   };
 
   // edit with initial values
-  const onEditStudent = (record) => {
+  const editDrawer = (record) => {
     setIsEditing(true);
-    setLoginDetails({ email: record.email, expertise: record.expertise});
-    setProfileDetails({ name: record.name, address: record.address});
+    setLoginDetails({ email: record.email, expertise: record.expertise });
+    setProfileDetails({ name: record.name, address: record.address });
     setEditingStudent({ ...record });
   };
 
   // edit with updated values
   const onEditFinish = (editingStudent) => {
     store.editStudent(editingStudent);
-    setLoginDetails({ email: '', expertise: []});
-    setProfileDetails({ name: '', address: ''});
-    setEditingStudent({ email: '', expertise: [], name: '', address: '', id: 0});
+    resetStudent();
     setIsEditing(false);
   };
-  
+
   return (
     <>
       <Space>
         <Button
           style={{ marginLeft: "40px", marginBottom: "20px" }}
           type="primary"
-          onClick={showDrawer}
+          onClick={addDrawer}
         >
           Add a new Student
         </Button>
       </Space>
       <Drawer
-        title="Add a new Student"
+        title={isEditing ? "Edit Student" : "Add a new Student"}
         placement={"top"}
         width={500}
         height={"100%"}
-        onClose={onCloseAdd}
+        onClose={isEditing ? onCloseEdit : onCloseAdd}
         destroyOnClose={true}
-        open={open}
+        open={isEditing ? isEditing : open}
       >
         <DataDrawer
-          studentId={toJS(store.students).length + 1}
+          studentId={isEditing ? editingStudent.id : toJS(store.students).length + 1}
           loginDetails={loginDetails}
           profileDetails={profileDetails}
           setLoginDetails={setLoginDetails}
           setProfileDetails={setProfileDetails}
-          onRowModify={onAddFinish}
+          onRowModify={isEditing ? onEditFinish : onAddFinish}
           closeDrawer={onFinishClosed}
+          mode={isEditing}
         />
       </Drawer>
-
-      {isEditing && (
-        <Drawer
-          title="Edit Student"
-          placement={"top"}
-          width={500}
-          height={"100%"}
-          onClose={onCloseEdit}
-          open={isEditing}
-        >
-          <DataDrawer
-            studentId={editingStudent.id}
-            loginDetails={loginDetails}
-            profileDetails={profileDetails}
-            setLoginDetails={setLoginDetails}
-            setProfileDetails={setProfileDetails}
-            onRowModify={onEditFinish}
-            closeDrawer={onFinishClosed}
-          />
-        </Drawer>
-      )}
 
       <div style={{ marginLeft: "40px" }}>
         <Table columns={columns} dataSource={toJS(store.students)}></Table>
